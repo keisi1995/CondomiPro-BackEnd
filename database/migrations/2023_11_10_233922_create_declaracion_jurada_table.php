@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('declaracion_jurada', function (Blueprint $table) {
             $table->id('id_declaracion_jurada');
             $table->string('descripcion', 100);
-            $table->double('porcenjate_acciones', 6, 2);
+            $table->double('porcentaje_acciones', 6, 2);
             $table->string('estado', 10);
             $table->string('observacion', 200);
             $table->unsignedBigInteger('id_propiedad');
