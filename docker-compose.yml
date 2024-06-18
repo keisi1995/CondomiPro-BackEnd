@@ -1,0 +1,49 @@
+version: '3.8'
+services:
+  backend-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: svc-backend-dev
+    ports:
+      - 8081:80
+    volumes:
+      - .:/var/www/html
+      - /var/www/html/vendor
+    depends_on:
+      - database-dev
+    networks:
+      my-network-backend-dev:
+        aliases:
+          - host-backend-dev
+
+  database-dev:
+    image: mysql
+    container_name: svc-database-dev
+    restart: always
+    environment:
+      MYSQL_DATABASE: condomipro
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_PASSWORD: laravel
+      MYSQL_USER: laravel
+      MYSQL_INITDB_SKIP_TZINFO: '1'
+      TZ: 'UTC'  # Opcional: Ajusta la zona horaria según tus necesidades
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    ports:
+      - 3307:3306
+    volumes:
+      - ./mysql_data/dev:/var/lib/mysql
+    networks:
+      my-network-backend-dev:
+        aliases:
+          - host-database-dev
+           
+volumes:
+  mysql_data: {}
+
+networks:
+  my-network-backend-dev:
+    name: app-net-backend-dev
+    driver: bridge
+    ipam:
+      driver: default
